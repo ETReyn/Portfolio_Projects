@@ -18,10 +18,10 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
     }
 
     @Override
-    public HappinessPercentageData getCountryData(int happiness_id) {
+    public HappinessPercentageData getCountryData(int happiness_id, String table) {
         HappinessPercentageData data = null;
         String sql = "Select * " +
-                "From happiness_percentage " +
+                "From " +table+"" +
                 "Where id = ?;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql, happiness_id);
         if(result.next())
@@ -31,10 +31,10 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
         return data;    }
 
     @Override
-    public List<HappinessPercentageData> getAllReports() {
+    public List<HappinessPercentageData> getAllReports(String table) {
         List<HappinessPercentageData> data = new ArrayList<>();
         String sql = "Select * " +
-                "From happiness_percentage;";
+                "From " +table+";";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
         while(result.next())
         {
@@ -43,10 +43,10 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
         return data;
     }
 
-    public List<HappinessPercentageData> getReportsForNegativeResidual() {
+    public List<HappinessPercentageData> getReportsForNegativeResidual(String table) {
         List<HappinessPercentageData> data = new ArrayList<>();
         String sql = "Select * " +
-                "From happiness_percentage " +
+                "From "+table+" " +
                 "Where residual_percent < -9.9;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
         while(result.next())
@@ -56,10 +56,10 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
         return data;
     }
 
-    public List<HappinessPercentageData> getReportsForTopHappy() {
+    public List<HappinessPercentageData> getReportsForTopHappy(String table) {
         List<HappinessPercentageData> data = new ArrayList<>();
         String sql = "Select * " +
-                "From happiness_percentage " +
+                "From "+table+" " +
                 "Limit 10";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
         while(result.next())
@@ -69,10 +69,10 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
         return data;
     }
 
-    public List<HappinessPercentageData> getReportsForTopSad() {
+    public List<HappinessPercentageData> getReportsForTopSad(String table) {
         List<HappinessPercentageData> data = new ArrayList<>();
         String sql = "Select * " +
-                "From happiness_percentage " +
+                "From "+table+" " +
                 "Order By total_score Desc " +
                 "Limit 10;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
@@ -83,10 +83,10 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
         return data;
     }
 
-    public List<HappinessPercentageData> getReportsForMassivelyPositiveResidual() {
+    public List<HappinessPercentageData> getReportsForMassivelyPositiveResidual(String table) {
         List<HappinessPercentageData> data = new ArrayList<>();
         String sql = "Select * " +
-                "From happiness_percentage " +
+                "From "+table+" " +
                 "Where residual_percent > 9.9;";
         SqlRowSet result = jdbcTemplate.queryForRowSet(sql);
         while(result.next())
@@ -97,24 +97,24 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
     }
 
     @Override
-    public HappinessPercentageData createHappinessData(HappinessPercentageData data) {
-        String sql = "Insert Into happiness_percentage (country_name, total_score, residual_percent, gdp_percent, corruption_percent, life_expectancy_percent, social_support_percent, generosity_percent, personal_autonomy_percent) " +
+    public HappinessPercentageData createHappinessData(HappinessPercentageData data, String table) {
+        String sql = "Insert Into "+table+" (country_name, total_score, residual_percent, gdp_percent, corruption_percent, life_expectancy_percent, social_support_percent, generosity_percent, personal_autonomy_percent) " +
                 "Values(?,?,?,?,?,?,?,?,?) Returning id;";
         Integer newInt = jdbcTemplate.queryForObject(sql, Integer.class, data.getCountry_name(), data.getTotal_score(), data.getResidual_percentage(),
                 data.getGdp_percentage(), data.getCorruption_percentage(), data.getLife_expectancy_percentage(), data.getSocial_support_percentage(),
                 data.getGenerosity_percentage(), data.getPersonal_autonomy_percentage());
-        return getCountryData(newInt);    }
+        return getCountryData(newInt, table);    }
 
     @Override
-    public void deleteData(int happiness_id) {
-        String sql = "Delete From happiness_percentage " +
+    public void deleteData(int happiness_id, String table) {
+        String sql = "Delete From "+table+" " +
                 "Where id = ?;";
         jdbcTemplate.update(sql, happiness_id);
     }
 
     @Override
-    public void updateData(HappinessPercentageData data) {
-        String sql = "Update happiness_percentage " +
+    public void updateData(HappinessPercentageData data, String table) {
+        String sql = "Update "+table+" " +
                 "Set country_name = ?, total_score = ?, residual_percent = ?, gdp_percent = ?, corruption_percent = ?, life_expectancy_percent = ?, social_support_percent = ?, generosity_percent = ?, personal_autonomy_percent = ? " +
                 "Where id = ?;";
         jdbcTemplate.update(sql, data.getCountry_name(), data.getTotal_score(), data.getResidual_percentage(),
@@ -125,13 +125,13 @@ public class JdbcHappinessPercentageDao implements HappinessPercentageDao {
     private HappinessPercentageData mapToHappinessPercentage(SqlRowSet result)
     {
         HappinessPercentageData happiness = new HappinessPercentageData();
-        happiness.setGdp_percentage(result.getDouble("gdp_percent"));
         happiness.setResidual_percentage(result.getDouble("residual_percent"));
         happiness.setLife_expectancy_percentage(result.getDouble("life_expectancy_percent"));
         happiness.setSocial_support_percentage(result.getDouble("social_support_percent"));
         happiness.setGenerosity_percentage(result.getDouble("generosity_percent"));
         happiness.setPersonal_autonomy_percentage(result.getDouble("personal_autonomy_percent"));
         happiness.setId(result.getInt("id"));
+        happiness.setGdp_percentage(result.getDouble("gdp_percent"));
         happiness.setCorruption_percentage(result.getDouble("corruption_percent"));
         happiness.setTotal_score(result.getDouble("total_score"));
         happiness.setCountry_name(result.getString("country_name"));

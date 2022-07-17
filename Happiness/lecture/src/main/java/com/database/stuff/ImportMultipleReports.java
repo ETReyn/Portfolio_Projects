@@ -4,13 +4,15 @@ public class ImportMultipleReports {
 
     public static void main(String[] args) {
 
-        String[] wHR = {"WHR 2022", "WHR 2020", "WHR 2021"};
-        String[] wHRTable = {"twenty_two_happiness", "twenty_happiness", "twenty_one_happiness"};
+        String[] wHR = {"WHR 2019", "WHR 2018", "WHR 2017", "WHR 2016"};
+        String[] wHRTable = {"nineteen_happiness", "eighteen_happiness", "seventeen_happiness", "sixteen_happiness"};
+
 
         for (int i = 0; i < wHR.length; i++) {
+
             ImportData newImport = new ImportData(wHR[i], wHRTable[i]);
-            newImport.printHeader();
-            newImport.importData();
+//            newImport.importData();
+            newImport.putPercentagesInDatabase();
 
         }
 

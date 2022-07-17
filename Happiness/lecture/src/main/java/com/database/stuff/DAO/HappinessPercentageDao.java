@@ -12,33 +12,33 @@ public interface HappinessPercentageDao {
      * @param happiness_id the id of the country's happiness rating
      * @return a filled out happiness data object
      */
-    public HappinessPercentageData getCountryData(int happiness_id);
+    public HappinessPercentageData getCountryData(int happiness_id, String table);
 
     /**
      * Get a list of all reports for country happiness data
      *
      * @return all happiness reports as objects
      */
-    public List<HappinessPercentageData> getAllReports();
+    public List<HappinessPercentageData> getAllReports(String table);
 
     /**
      * Creates a new record of country happiness data
      * @param data the record to be added
      * @return the record in the database
      */
-    public HappinessPercentageData createHappinessData(HappinessPercentageData data);
+    public HappinessPercentageData createHappinessData(HappinessPercentageData data, String table);
 
     /**
      * Deletes an record from the dataset
      *
      * @param happiness_id is the id of the record to be deleted
      */
-    public void deleteData(int happiness_id);
+    public void deleteData(int happiness_id, String table);
 
     /**
      * Updates a record from the database
      *
      * @param data the object to update
      */
-    public void updateData(HappinessPercentageData data);
+    public void updateData(HappinessPercentageData data, String table);
 }

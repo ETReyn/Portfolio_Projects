@@ -24,21 +24,33 @@ public class DatabaseAccess {
 
         DatabaseAccess dA = new DatabaseAccess(dataSource);
         dA.run();
-//        System.out.println("Totals:");
-//        int[][] totals = dA.maxPercentage();
-//        System.out.println(dA.switchCases(totals));
-//        System.out.println("Unduly Happy:");
-//        int[][] undulyHappy = dA.getUndulyHappy();
-//        System.out.println(dA.switchCases(undulyHappy));
-//        System.out.println("Top Happy:");
-//        int[][] topHappy = dA.getTopHappy();
-//        System.out.println(dA.switchCases(topHappy));
-//        System.out.println("Unduly Sad:");
-//        int[][] undulySad = dA.getUndulySad();
-//        System.out.println(dA.switchCases(undulySad));
-//        System.out.println("Top Sad:");
-//        int[][] topSad = dA.getTopSad();
-//        System.out.println(dA.switchCases(topSad));
+        //String[] wHRTable = {"twenty_two_happiness_percentage", "twenty_one_happiness_percentage", "twenty_happiness_percentage"};
+        String[] wHRTable = {"twenty_two_happiness_percentage","twenty_one_happiness_percentage", "twenty_happiness_percentage" ,"nineteen_happiness_percentage", "eighteen_happiness_percentage", "seventeen_happiness_percentage", "sixteen_happiness_percentage"};
+        String[] wHRTable1 = {"twenty_two_happiness","twenty_one_happiness", "twenty_happiness" ,"nineteen_happiness", "eighteen_happiness", "seventeen_happiness", "sixteen_happiness"};
+
+        for(int i = 0; i < wHRTable.length; i++) {
+            System.out.println("Totals for "+wHRTable[i]+":");
+            int[][] totals = dA.maxPercentage(wHRTable[i]);
+            System.out.println(dA.switchCases(totals));
+            dA.printUtility(totals);
+            System.out.println("Unduly Happy for "+wHRTable[i]+":");
+            int[][] undulyHappy = dA.getUndulyHappy(wHRTable[i]);
+            System.out.println(dA.switchCases(undulyHappy));
+            dA.printUtility(undulyHappy);
+            System.out.println("Top Happy for "+wHRTable[i]+":");
+            int[][] topHappy = dA.getTopHappy(wHRTable[i]);
+            System.out.println(dA.switchCases(topHappy));
+            dA.printUtility(topHappy);
+            System.out.println("Unduly Sad for "+wHRTable[i]+":");
+            int[][] undulySad = dA.getUndulySad(wHRTable[i]);
+            System.out.println(dA.switchCases(undulySad));
+            dA.printUtility(undulySad);
+            System.out.println("Top Sad for "+wHRTable[i]+":");
+            int[][] topSad = dA.getTopSad(wHRTable[i]);
+            System.out.println(dA.switchCases(topSad));
+            dA.printUtility(topSad);
+            System.out.println();
+        }
     }
 
     public DatabaseAccess(DataSource dataSource) {
@@ -47,15 +59,13 @@ public class DatabaseAccess {
     }
 
     public void run()    {
-        database.updateResidualAndDystopia("twenty_two_happiness");
-
     }
 
 
-    public int[][] maxPercentage() {
+    public int[][] maxPercentage(String table) {
         //List<Double> testRecords = new ArrayList<>();
         int[][] utility = new int[7][7];
-        List<HappinessPercentageData> data = database2.getAllReports();
+        List<HappinessPercentageData> data = database2.getAllReports(table);
         for (int i = 0; i < data.size(); i++) {
             double[] currentData = getCurrentData(data.get(i));
             updateMatrix(utility, currentData);
@@ -74,10 +84,10 @@ public class DatabaseAccess {
         System.out.println();
     }
 
-    public int[][] getUndulySad() {
+    public int[][] getUndulySad(String table) {
         //List<Double> testRecords = new ArrayList<>();
         int[][] utility = new int[7][7];
-        List<HappinessPercentageData> data = database2.getReportsForNegativeResidual();
+        List<HappinessPercentageData> data = database2.getReportsForNegativeResidual(table);
         for (int i = 0; i < data.size(); i++) {
             double[] currentData = getCurrentData(data.get(i));
             updateMatrix(utility, currentData);
@@ -85,10 +95,10 @@ public class DatabaseAccess {
         return utility;
     }
 
-    public int[][] getUndulyHappy() {
+    public int[][] getUndulyHappy(String table) {
         //List<Double> testRecords = new ArrayList<>();
         int[][] utility = new int[7][7];
-        List<HappinessPercentageData> data = database2.getReportsForMassivelyPositiveResidual();
+        List<HappinessPercentageData> data = database2.getReportsForMassivelyPositiveResidual(table);
         for (int i = 0; i < data.size(); i++) {
             double[] currentData = getCurrentData(data.get(i));
             updateMatrix(utility, currentData);
@@ -96,10 +106,10 @@ public class DatabaseAccess {
         return utility;
     }
 
-    public int[][] getTopSad() {
+    public int[][] getTopSad(String table) {
         //List<Double> testRecords = new ArrayList<>();
         int[][] utility = new int[7][7];
-        List<HappinessPercentageData> data = database2.getReportsForTopSad();
+        List<HappinessPercentageData> data = database2.getReportsForTopSad(table);
         for (int i = 0; i < data.size(); i++) {
             double[] currentData = getCurrentData(data.get(i));
             updateMatrix(utility, currentData);
@@ -107,10 +117,10 @@ public class DatabaseAccess {
         return utility;
     }
 
-    public int[][] getTopHappy() {
+    public int[][] getTopHappy(String table) {
         //List<Double> testRecords = new ArrayList<>();
         int[][] utility = new int[7][7];
-        List<HappinessPercentageData> data = database2.getReportsForTopHappy();
+        List<HappinessPercentageData> data = database2.getReportsForTopHappy(table);
         for (int i = 0; i < data.size(); i++) {
             double[] currentData = getCurrentData(data.get(i));
             updateMatrix(utility, currentData);

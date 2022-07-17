@@ -27,7 +27,7 @@ public class ImportData {
     public ImportData(String fileName, String tableName) {
         this.importFileName = fileName + ".csv";
         this.tableName = tableName + ".sql";
-        tableNamePercentage = tableName + "-percentage.sql";
+        tableNamePercentage = tableName + "_percentage.sql";
         dataSource.setUrl("jdbc:postgresql://localhost:5432/happiness");
         dataSource.setUsername("postgres");
         dataSource.setPassword("postgres1");
@@ -37,7 +37,7 @@ public class ImportData {
 
     public void importData() {
         File fileName = new File(importFileName);
-
+        printHeader();
         try (Scanner reader = new Scanner(fileName)) {
             if(reader.hasNextLine())
             {
@@ -152,10 +152,10 @@ public class ImportData {
     public void putPercentagesInDatabase() {
         File newFile = new File(tableNamePercentage);
         List<HappinessData> data = new ArrayList<>();
-
-        data = imports.getAllReports(tableNamePercentage);
+        printHeaderForPercentage();
+        data = imports.getAllReports(tableName.substring(0, tableName.length()-4));
         for (HappinessData result : data) {
-            System.out.println(result.getCountry_name());
+//            System.out.println(result.getCountry_name());
             double whole = (result.getTotal_score() - result.getDystopia()) / 100;
             String[] columnName = {"country_name", "total_score", "residual_percent", "gdp_percent", "social_support_percent", "life_expectancy_percent", "personal_autonomy_percent", "generosity_percent", "corruption_percent"};
             String val = "Insert Into "+tableNamePercentage.substring(0, tableNamePercentage.length()-4)+" (" + columnName[0];
