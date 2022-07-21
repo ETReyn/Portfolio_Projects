@@ -162,7 +162,7 @@ public class ArtFilesDaoJdbc implements ArtFilesDao{
         sql = "Select title, artist_title " +
                 "From artwork " +
                 "Where database_id = ?;";
-        result = jdbcTemplate.queryForRowSet(sql, count);
+        result = jdbcTemplate.queryForRowSet(sql, rand.nextInt(count));
         if(result.next())
         {
             String artist = result.getString("artist_title");
