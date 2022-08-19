@@ -11,7 +11,7 @@ public class Application {
         String repeat = "y";
         while(repeat.equals("y"))
         {
-            repeat = tA.controlFlow();
+            repeat = bA.controlFlow();
         }
     }
 }

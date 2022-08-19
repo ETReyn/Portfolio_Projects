@@ -44,7 +44,7 @@
       <recent name="com.sortingalgorithms" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.DatabaseAccess">
+  <component name="RunManager" selected="Application.Application">
     <configuration name="Application" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="com.techelevator.Application" />
       <module name="m01d07-collections-part1-lecture" />
@@ -116,11 +116,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Application" />
         <item itemvalue="Application.DatabaseAccess" />
         <item itemvalue="JUnit.JdbcHappinessPercentageTest" />
         <item itemvalue="JUnit.JdbcHappinessDataTest" />
         <item itemvalue="Application.ImportData" />
-        <item itemvalue="Application.Application" />
       </list>
     </recent_temporary>
   </component>
